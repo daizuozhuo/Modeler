@@ -15,6 +15,7 @@ public:
         : ModelerView(x,y,w,h,label) { }
     virtual void draw();
 private:
+	void drawBody();
 	void drawRightleg();
 	void drawLeftleg();
 };
@@ -204,6 +205,20 @@ void Gundan::drawLeftleg()
 	glPopMatrix();
 }
 
+void Gundan::drawBody()
+{
+	glPushMatrix();
+	//draw GN driver
+	glTranslated(0, 0, -0.5-0.8);
+	setDiffuseColor(1.0f, 1.0f, 1.0f);
+	drawCylinder(0.8, 0.01, 0.4);
+	//draw Body
+	glTranslated(-1, -1, 0.8);
+	setDiffuseColor(COLOR_BLUE);
+	drawBox(2, 2.5, 1);
+	glPopMatrix();
+}
+
 
 // We are going to override (is that the right word?) the draw()
 // method of ModelerView to draw out Gundan
@@ -226,15 +241,7 @@ void Gundan::draw()
 	}
 	glPopMatrix();
 
-	//draw the body
-	glPushMatrix();
-	{
-		glTranslated(-1, -1, -0.5);
-		setDiffuseColor(COLOR_BLUE);
-		drawBox(2, 2.5, 1);
-	}
-	glPopMatrix();
-
+	drawBody();
 	double armLength = 4.0;
 	//draw the right hand
 	glPushMatrix();
