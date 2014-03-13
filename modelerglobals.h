@@ -5,12 +5,9 @@
 #define M_PI 3.141592653589793238462643383279502
 #endif
 
-// This is a list of the controls for the SampleModel
-// We'll use these constants to access the values 
-// of the controls from the user interface.
-enum SampleModelControls
+enum GundanControls
 { 
-	XPOS, YPOS, ZPOS, HEIGHT, ROTATE, NUMCONTROLS
+	KNEEL, NUMCONTROLS
 };
 
 // Colors

@@ -79,10 +79,12 @@ ModelerView* createGundan(int x, int y, int w, int h, char *label)
 
 void Gundan::drawRightleg()
 {
+	double kneel = VAL(KNEEL);
 	//draw the right leg
 	glPushMatrix();
 	//draw upper joint
 	glTranslated(0.1, -1.4, 0);
+	glRotated(kneel, -1.0, 0.0, 0.0); 
 	glPushMatrix();
 	{
 		glRotated(90, 0.0, 1.0, 0.0);
@@ -109,6 +111,7 @@ void Gundan::drawRightleg()
 	//draw middle joint
 	ulen += -0.1;
 	glTranslated(0.3, ulen, 0);
+	glRotated(2 * kneel, 1.0, 0.0, 0.0); 
 	glPushMatrix();
 	{
 		glRotated(90, 0.0, 1.0, 0.0);
@@ -142,9 +145,11 @@ void Gundan::drawRightleg()
 
 void Gundan::drawLeftleg()
 {
+	double kneel = VAL(KNEEL);
 	glPushMatrix();
 	//draw upper joint
 	glTranslated(-0.1, -1.4, 0);
+	glRotated(kneel, -1.0, 0.0, 0.0); 
 	glPushMatrix();
 	{
 		glRotated(-90, 0.0, 1.0, 0.0);
@@ -171,6 +176,7 @@ void Gundan::drawLeftleg()
 	//draw middle joint
 	ulen += -0.1;
 	glTranslated(-0.3, ulen, 0);
+	glRotated(2 * kneel, 1.0, 0.0, 0.0); 
 	glPushMatrix();
 	{
 		glRotated(-90, 0.0, 1.0, 0.0);
@@ -215,7 +221,8 @@ void Gundan::drawBody()
 	//draw Body
 	glTranslated(-1, -1, 0.8);
 	setDiffuseColor(COLOR_BLUE);
-	drawBox(2, 2.5, 1);
+	glScaled(2, 2.5, 1); 
+	drawBox(1, 1, 1);
 	glPopMatrix();
 }
 
@@ -294,12 +301,7 @@ void Gundan::draw()
 int main()
 {
     ModelerControl controls[NUMCONTROLS];
-    controls[XPOS] = ModelerControl("X Position", -5, 5, 0.1f, 0);
-    controls[YPOS] = ModelerControl("Y Position", 0, 5, 0.1f, 0);
-    controls[ZPOS] = ModelerControl("Z Position", -5, 5, 0.1f, 0);
-    controls[HEIGHT] = ModelerControl("Height", 1, 2.5, 0.1f, 1);
-	controls[ROTATE] = ModelerControl("Rotate", -135, 135, 1, 0);
-
+    controls[KNEEL] = ModelerControl("kneel", 0, 70, 1, 0);
     ModelerApplication::Instance()->Init(&createGundan, controls, NUMCONTROLS);
     return ModelerApplication::Instance()->Run();
 }

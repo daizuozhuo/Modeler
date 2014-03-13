@@ -33,10 +33,10 @@
     <ClCompile Include="modelerview.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sample.cpp">
+    <ClCompile Include="gundan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gundan.cpp">
+    <ClCompile Include="sample.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,5 +68,8 @@
     <ClInclude Include="vec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
   </ItemGroup>
 </Project>

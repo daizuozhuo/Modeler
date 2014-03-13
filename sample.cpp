@@ -45,7 +45,7 @@ void SampleModel::draw()
 	setAmbientColor(.1f,.1f,.1f);
 	setDiffuseColor(COLOR_GREEN);
 	glPushMatrix();
-	glTranslated(VAL(XPOS), VAL(YPOS), VAL(ZPOS));
+	//glTranslated(VAL(XPOS), VAL(YPOS), VAL(ZPOS));
 
 		glPushMatrix();
 		glTranslated(-1.5, 0, -2);
@@ -55,11 +55,11 @@ void SampleModel::draw()
 
 		// draw cannon
 		glPushMatrix();
-		glRotated(VAL(ROTATE), 0.0, 1.0, 0.0);
+		//glRotated(VAL(ROTATE), 0.0, 1.0, 0.0);
 		glRotated(-90, 1.0, 0.0, 0.0);
-		drawCylinder(VAL(HEIGHT), 0.1, 0.1);
+		//drawCylinder(VAL(HEIGHT), 0.1, 0.1);
 
-		glTranslated(0.0, 0.0, VAL(HEIGHT));
+		//glTranslated(0.0, 0.0, VAL(HEIGHT));
 		drawCylinder(1, 1.0, 0.9);
 
 		glTranslated(0.0, 0.0, 0.5);
