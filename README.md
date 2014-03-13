@@ -12,3 +12,5 @@ Modeler
 
 ##Bonus
 - [x] control levels of detail
+- [x] complex shape with set of triangle
+- [x] widget(sword)_

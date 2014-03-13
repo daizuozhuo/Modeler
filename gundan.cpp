@@ -22,6 +22,7 @@ private:
 	void drawHip();
 	void drawRightleg();
 	void drawLeftleg();
+	void drawSword();
 };
 
 
@@ -262,7 +263,12 @@ void Gundan::drawLefthand()
 	glTranslated(d[0], d[1]-armLength, -0.5); 
 	setDiffuseColor(1.0f, 1.0f, 1.0f);
 	drawBox(e[0]-d[0], armLength, 1.0);
+	if(VAL(SWORD)) {
+		glTranslated((e[0]-d[0])/2, 0.0, 1.0);
+		drawSword();
+	}
 	glPopMatrix();
+
 }
 
 void Gundan::drawRighthand()
@@ -294,6 +300,58 @@ void Gundan::drawHip()
 	glPopMatrix();
 }
 
+void Gundan::drawSword()
+{
+	glPushMatrix();
+	glRotated(90, 0.0, 1.0, 0.0);
+	glRotated(120, 0.0, 0.0, 1.0);
+	glTranslated(-0.05, -0.2, 0);
+	glScaled(2.0, 1.0, 1.0);
+	glPushMatrix();
+	{
+		glTranslated(0.05, 0, 0);
+		glRotated(90, -1.0, 0.0, 0.0);
+		setDiffuseColor(0.7f, 0.7f, 0.7f);
+		drawCylinder(0.5, 0.05, 0.05);
+	}
+	glPopMatrix();
+
+	{//left handguard
+		v3 a1(0, 0.2, -0.05);
+		v3 b1(0, 1.0, -0.05);
+		v3 c1(-0.1, 0.8, -0.05);
+		v3 d1(-0.1, 0.4, -0.05);
+		v3 a2(0, 0.2, 0.05);
+		v3 b2(0, 1.0, 0.05);
+		v3 c2(-0.1, 0.8, 0.05);
+		v3 d2(-0.1, 0.4, 0.05);
+		setDiffuseColor(0.7f, 0.7f, 0.7f);
+		drawQuadruple(a1, b1, c1, d1, a2, b2, c2, d2);
+	}
+	{//right handguard
+		v3 a1(0.2, 0.4, -0.05);
+		v3 b1(0.2, 0.8, -0.05);
+		v3 c1(0.1, 1.0, -0.05);
+		v3 d1(0.1, 0.2, -0.05);
+		v3 a2(0.2, 0.4, 0.05);
+		v3 b2(0.2, 0.8, 0.05);
+		v3 c2(0.1, 1.0, 0.05);
+		v3 d2(0.1, 0.2, 0.05);
+		setDiffuseColor(0.7f, 0.7f, 0.7f);
+		drawQuadruple(a1, b1, c1, d1, a2, b2, c2, d2);
+	}
+	double slen = 2.5;	
+	glTranslated(0.0, 0.5, -0.005);
+	setDiffuseColor(COLOR_GREEN);
+	drawBox(0.1, slen, 0.01);
+	v3 a(0.0, slen, 0.0);
+	v3 b(0.1, slen, 0.0);
+	v3 c(0.04, slen+0.3, 0.0);
+	drawPrism(a, b, c, 0.01);
+
+	glPopMatrix();
+}
+
 // We are going to override (is that the right word?) the draw()
 // method of ModelerView to draw out Gundan
 void Gundan::draw()
@@ -321,6 +379,7 @@ int main()
     controls[KNEEL] = ModelerControl("kneel", 0, 70, 1, 0);
     controls[LLEGX] = ModelerControl("left leg x", 0, 60, 1, 5);
     controls[RLEGX] = ModelerControl("right leg x", 0, 60, 1, 5);
+	controls[SWORD] = ModelerControl("sword", 0, 1, 1, 1);
     ModelerApplication::Instance()->Init(&createGundan, controls, NUMCONTROLS);
     return ModelerApplication::Instance()->Run();
 }
