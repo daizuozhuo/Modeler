@@ -7,8 +7,8 @@ Modeler
 - [x] four levels
 - [x] use glTranslate, glRotate, glScale
 - [x] use glPushMatrix, glPopMatrix
-- [ ] control more than one joint slider
-- [ ] reimplement gluLookAt
+- [x] control more than one joint slider
+- [x] reimplement gluLookAt
 
 ##Bonus
 - [ ] control levels of detail

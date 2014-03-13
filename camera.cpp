@@ -183,4 +183,39 @@ void Camera::applyViewingTransform() {
 				mUpVector[0], mUpVector[1], mUpVector[2]);
 }
 
+
+void Camera::lookAt(Vec3f position, Vec3f lookAt, Vec3f upVector) {
+	/* Reference from opengl mannual
+		Let
+            centerX - eyeX
+        F = centerY - eyeY
+            centerZ - eyeZ
+       Let UP be the vector (upX, upY, upZ).
+       Then normalize as follows: f = F/ || F ||
+       UP' = UP/|| UP ||
+       Finally, let s = f X UP', and u = s X f.
+       M is then constructed as follows:
+             s[0]    s[1]    s[2]    0
+             u[0]    u[1]    u[2]    0
+        M = -f[0]   -f[1]   -f[2]    0
+              0       0       0      1
+       and gluLookAt is equivalent to
+       glMultMatrixf(M);
+       glTranslated (-eyeX, -eyeY, -eyeZ);
+	   */
+	Vec3f f = lookAt - position;
+	f.normalize();
+	Vec3f up = upVector;
+	up.normalize();
+	Vec3f s(f[0]*up[0], f[1]*up[1], f[2]*up[2]);
+	Vec3f u(s[0]*f[0], s[1]*f[1], s[2]*f[2]);
+	GLfloat M[] = {s[0], s[1], s[2], 0, 
+				   u[0], u[1], u[2], 0,
+				   -f[0], -f[1], -f[2], 
+				   0, 0, 0, 0, 1};
+	glMultMatrixf(M);
+	glTranslatef(-position[0], -position[1], -position[2]);
+}
+
+
 #pragma warning(pop)
