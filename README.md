@@ -11,4 +11,4 @@ Modeler
 - [x] reimplement gluLookAt
 
 ##Bonus
-- [ ] control levels of detail
+- [x] control levels of detail

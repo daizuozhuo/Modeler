@@ -15,7 +15,11 @@ public:
         : ModelerView(x,y,w,h,label) { }
     virtual void draw();
 private:
+	void drawHead();
 	void drawBody();
+	void drawRighthand();
+	void drawLefthand();
+	void drawHip();
 	void drawRightleg();
 	void drawLeftleg();
 };
@@ -85,6 +89,7 @@ void Gundan::drawRightleg()
 	//draw upper joint
 	glTranslated(0.1, -1.4, 0);
 	glRotated(kneel, -1.0, 0.0, 0.0); 
+	glRotated(VAL(RLEGX),0.0, 0.0, 1.0); 
 	glPushMatrix();
 	{
 		glRotated(90, 0.0, 1.0, 0.0);
@@ -100,10 +105,10 @@ void Gundan::drawRightleg()
 		v3 b1(0.3, ulen, -0.3);
 		v3 c1(0.3, ulen, 0.3);
 		v3 d1(0.9, ulen, 0.3);
-		v3 a2(1.0, 0.0, -0.3);
+		v3 a2(1.1, 0.0, -0.3);
 		v3 b2(0.2, 0.0, -0.3);
 		v3 c2(0.2, 0.0, 0.3);
-		v3 d2(1.0, 0.0, 0.3);
+		v3 d2(1.1, 0.0, 0.3);
 		setDiffuseColor(1.0f, 1.0f, 1.0f);
 		drawQuadruple(a1, b1, c1, d1, a2, b2, c2, d2);
 	}
@@ -150,6 +155,7 @@ void Gundan::drawLeftleg()
 	//draw upper joint
 	glTranslated(-0.1, -1.4, 0);
 	glRotated(kneel, -1.0, 0.0, 0.0); 
+	glRotated(VAL(LLEGX),0.0, 0.0, -1.0); 
 	glPushMatrix();
 	{
 		glRotated(-90, 0.0, 1.0, 0.0);
@@ -165,10 +171,10 @@ void Gundan::drawLeftleg()
 		v3 b1(-0.3, ulen, -0.3);
 		v3 c1(-0.3, ulen, 0.3);
 		v3 d1(-0.9, ulen, 0.3);
-		v3 a2(-1.0, 0.0, -0.3);
+		v3 a2(-1.1, 0.0, -0.3);
 		v3 b2(-0.2, 0.0, -0.3);
 		v3 c2(-0.2, 0.0, 0.3);
-		v3 d2(-1.0, 0.0, 0.3);
+		v3 d2(-1.1, 0.0, 0.3);
 		setDiffuseColor(1.0f, 1.0f, 1.0f);
 		drawQuadruple(d1, c1, b1, a1, d2, c2, b2, a2);
 	}
@@ -226,6 +232,67 @@ void Gundan::drawBody()
 	glPopMatrix();
 }
 
+void Gundan::drawHead()
+{	
+	glPushMatrix();
+	glTranslated(-0.5, 2, -0.5);
+	setDiffuseColor(1.0f, 1.0f, 1.0f);
+	drawBox(1, 1, 1);
+	glTranslated(0.3, 0.6, 1);
+	setDiffuseColor(COLOR_RED);
+	drawBox(0.4, 0.8, 0.1);
+	setDiffuseColor(1.0f, 1.0f, 0);
+	drawPrism(0, 0, 0, 0, 0.4, 0, -1.6, 1.6, 0, 0.1);
+	drawPrism(0.4, 0, 0, 2.0, 1.6, 0, 0.4, 0.4, 0, 0.1);
+	glPopMatrix();
+}
+
+void Gundan::drawLefthand()
+{
+	double armLength = 4.0;
+	glPushMatrix(); 
+	setDiffuseColor(COLOR_BLUE);
+	v3 a(-1.1, 1.5, -0.5);
+	v3 b(-1.1, 1.0, -0.5);
+	v3 c(-2.1, 1.5, -0.5);
+	v3 d(-1.5, 1.2, -0.5);
+	v3 e(-2.1, 1.2, -0.5);
+	drawPrism(a, c, b, 1.0);
+	drawPrism(d, c, e, 1.0);
+	glTranslated(d[0], d[1]-armLength, -0.5); 
+	setDiffuseColor(1.0f, 1.0f, 1.0f);
+	drawBox(e[0]-d[0], armLength, 1.0);
+	glPopMatrix();
+}
+
+void Gundan::drawRighthand()
+{
+	double armLength = 4.0;
+	glPushMatrix();
+	setDiffuseColor(COLOR_BLUE);
+	v3 a(1.1, 1.5, -0.5);
+	v3 b(1.1, 1.0, -0.5);
+	v3 c(2.1, 1.5, -0.5);
+	v3 d(1.5, 1.2, -0.5);
+	v3 e(2.1, 1.2, -0.5);
+	drawPrism(a, b, c, 1.0);
+	drawPrism(d, e, c, 1.0);
+	glTranslated(d[0], d[1]-armLength, -0.5); 
+	setDiffuseColor(1.0f, 1.0f, 1.0f);
+	drawBox(e[0]-d[0], armLength, 1.0);
+	glPopMatrix();
+}
+
+void Gundan::drawHip()
+{
+	glPushMatrix();
+	setDiffuseColor(1.0f, 1.0f, 1.0f);
+	v3 a(1.2, -1.1, -0.5);
+	v3 b(-1.2, -1.1, -0.5);
+	v3 c(0, -1.6, -0.5);
+	drawPrism(a, b, c, 1.0);
+	glPopMatrix();
+}
 
 // We are going to override (is that the right word?) the draw()
 // method of ModelerView to draw out Gundan
@@ -233,75 +300,27 @@ void Gundan::draw()
 {
     ModelerView::draw();
 	setAmbientColor(.1f,.1f,.1f);
-	//draw the head
-	glPushMatrix();
-	{
-		glTranslated(-0.5, 2, -0.5);
-		setDiffuseColor(1.0f, 1.0f, 1.0f);
-		drawBox(1, 1, 1);
-		glTranslated(0.3, 0.6, 1);
-		setDiffuseColor(COLOR_RED);
-		drawBox(0.4, 0.8, 0.1);
-		setDiffuseColor(1.0f, 1.0f, 0);
-		drawPrism(0, 0, 0, 0, 0.4, 0, -1.6, 1.6, 0, 0.1);
-		drawPrism(0.4, 0, 0, 2.0, 1.6, 0, 0.4, 0.4, 0, 0.1);
+	int level = VAL(LEVEL);
+	if(level >= 1) drawHead();
+	if(level >= 2) drawBody();
+    if(level >= 3){
+		drawRighthand();
+		drawLefthand();
+		drawHip();
 	}
-	glPopMatrix();
-
-	drawBody();
-	double armLength = 4.0;
-	//draw the right hand
-	glPushMatrix();
-	{
-		setDiffuseColor(COLOR_BLUE);
-		v3 a(1.1, 1.5, -0.5);
-		v3 b(1.1, 1.0, -0.5);
-		v3 c(2.1, 1.5, -0.5);
-		v3 d(1.5, 1.2, -0.5);
-		v3 e(2.1, 1.2, -0.5);
-		drawPrism(a, b, c, 1.0);
-		drawPrism(d, e, c, 1.0);
-		glTranslated(d[0], d[1]-armLength, -0.5); 
-		setDiffuseColor(1.0f, 1.0f, 1.0f);
-		drawBox(e[0]-d[0], armLength, 1.0);
+	if(level >=4) {	
+		drawRightleg();
+		drawLeftleg();
 	}
-	glPopMatrix();
-
-	//draw the left hand
-	glPushMatrix(); 
-	{
-		setDiffuseColor(COLOR_BLUE);
-		v3 a(-1.1, 1.5, -0.5);
-		v3 b(-1.1, 1.0, -0.5);
-		v3 c(-2.1, 1.5, -0.5);
-		v3 d(-1.5, 1.2, -0.5);
-		v3 e(-2.1, 1.2, -0.5);
-		drawPrism(a, c, b, 1.0);
-		drawPrism(d, c, e, 1.0);
-		glTranslated(d[0], d[1]-armLength, -0.5); 
-		setDiffuseColor(1.0f, 1.0f, 1.0f);
-		drawBox(e[0]-d[0], armLength, 1.0);
-	}
-	glPopMatrix();
-
-	glPushMatrix();
-	{
-		setDiffuseColor(1.0f, 1.0f, 1.0f);
-		v3 a(1.2, -1.1, -0.5);
-		v3 b(-1.2, -1.1, -0.5);
-		v3 c(0, -1.6, -0.5);
-		drawPrism(a, b, c, 1.0);
-	}
-	glPopMatrix();
-	drawRightleg();
-	drawLeftleg();
-	
 }
 
 int main()
 {
     ModelerControl controls[NUMCONTROLS];
+    controls[LEVEL] = ModelerControl("level", 1, 4, 1, 4);
     controls[KNEEL] = ModelerControl("kneel", 0, 70, 1, 0);
+    controls[LLEGX] = ModelerControl("left leg x", 0, 60, 1, 5);
+    controls[RLEGX] = ModelerControl("right leg x", 0, 60, 1, 5);
     ModelerApplication::Instance()->Init(&createGundan, controls, NUMCONTROLS);
     return ModelerApplication::Instance()->Run();
 }

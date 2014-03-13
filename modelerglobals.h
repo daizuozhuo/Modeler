@@ -7,7 +7,7 @@
 
 enum GundanControls
 { 
-	KNEEL, NUMCONTROLS
+	LEVEL, KNEEL, LLEGX, RLEGX, NUMCONTROLS
 };
 
 // Colors
