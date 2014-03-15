@@ -84,7 +84,7 @@ ModelerView* createGundan(int x, int y, int w, int h, char *label)
 
 void Gundan::drawRightleg()
 {
-	double kneel = VAL(KNEEL);
+	double kneel = VAL(RKNEEL);
 	//draw the right leg
 	glPushMatrix();
 	//draw upper joint
@@ -151,7 +151,7 @@ void Gundan::drawRightleg()
 
 void Gundan::drawLeftleg()
 {
-	double kneel = VAL(KNEEL);
+	double kneel = VAL(LKNEEL);
 	glPushMatrix();
 	//draw upper joint
 	glTranslated(-0.1, -1.4, 0);
@@ -305,8 +305,8 @@ void Gundan::drawSword()
 	glPushMatrix();
 	glRotated(90, 0.0, 1.0, 0.0);
 	glRotated(120, 0.0, 0.0, 1.0);
+	glScaled(3.0, 2.0, 1.0);
 	glTranslated(-0.05, -0.2, 0);
-	glScaled(2.0, 1.0, 1.0);
 	glPushMatrix();
 	{
 		glTranslated(0.05, 0, 0);
@@ -376,7 +376,8 @@ int main()
 {
     ModelerControl controls[NUMCONTROLS];
     controls[LEVEL] = ModelerControl("level", 1, 4, 1, 4);
-    controls[KNEEL] = ModelerControl("kneel", 0, 70, 1, 0);
+    controls[LKNEEL] = ModelerControl("left kneel", 0, 70, 1, 0);
+    controls[RKNEEL] = ModelerControl("right kneel", 0, 70, 1, 0);
     controls[LLEGX] = ModelerControl("left leg x", 0, 60, 1, 5);
     controls[RLEGX] = ModelerControl("right leg x", 0, 60, 1, 5);
 	controls[SWORD] = ModelerControl("sword", 0, 1, 1, 1);
