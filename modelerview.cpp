@@ -77,7 +77,8 @@ int ModelerView::handle(int event)
 
 static GLfloat lightPosition0[] = { 4, 2, -4, 0 };
 static GLfloat lightDiffuse0[]  = { 1,1,1,1 };
-static GLfloat lightPosition1[] = { -2, 1, 5, 0 };
+//static GLfloat lightPosition1[] = { -2, 1, 5, 0 };
+static GLfloat lightPosition1[] = { 0, 20, 20, 5 };
 static GLfloat lightDiffuse1[]  = { 1, 1, 1, 1 };
 
 void ModelerView::draw()

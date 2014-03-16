@@ -11,6 +11,8 @@ Modeler
 - [x] reimplement gluLookAt
 
 ##Bonus
+- [x] change default light source
 - [x] control levels of detail
-- [x] complex shape with set of triangle
-- [x] widget(sword)_
+- [x] complex shape with set of triangle(shoes)
+- [x] widget(sword)
+- [x] texture(blue white checkbox)

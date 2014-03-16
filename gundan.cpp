@@ -218,6 +218,58 @@ void Gundan::drawLeftleg()
 	glPopMatrix();
 }
 
+void drawTextureRect(double x1, double y1, double x2, double y2)
+{ 
+	/* remember which matrix mode OpenGL was in. */
+	int savemode;
+	glGetIntegerv( GL_MATRIX_MODE, &savemode );
+	glMatrixMode( GL_MODELVIEW );
+	glPushMatrix();
+	//attach texture
+	GLuint tex;
+	glGenTextures(1, &tex);
+	glBindTexture(GL_TEXTURE_2D, tex);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	float color[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, color);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	const int w=15, h=15;
+	float pixels[w][h][3];
+	bool blue=true;
+	for(int i=0; i<w; i++) {
+		for(int j=0; j<w; j++) {
+			if(blue) {
+				pixels[i][j][0]=0.0;
+				pixels[i][j][1]=0.0;
+				pixels[i][j][2]=1.0;
+			} else {
+				pixels[i][j][0]=1.0;
+				pixels[i][j][1]=1.0;
+				pixels[i][j][2]=1.0;
+			}
+			blue = !blue;
+		}
+	};
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_FLOAT, pixels);
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glBegin( GL_QUADS );
+	
+	glNormal3d( 0.0, 0.0, 1.0 );
+	glTexCoord2f(0.0, 0.0); glVertex3f(x1, y1, 0.0);
+	glTexCoord2f(0.0, 1.0); glVertex3f(x1, y2, 0.0);
+	glTexCoord2f(1.0, 1.0); glVertex3f(x2, y2, 0.0);
+	glTexCoord2f(1.0, 0.0); glVertex3f(x2, y1, 0.0);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	/* restore the model matrix stack, and switch back to the matrix
+	mode we were in. */
+	glPopMatrix();
+	glMatrixMode( savemode );
+}
+
 void Gundan::drawBody()
 {
 	glPushMatrix();
@@ -228,10 +280,14 @@ void Gundan::drawBody()
 	//draw Body
 	glTranslated(-1, -1, 0.8);
 	setDiffuseColor(COLOR_BLUE);
-	glScaled(2, 2.5, 1); 
-	drawBox(1, 1, 1);
+	//glScaled(2, 2.5, 1); 
+	drawBox(2, 2.5, 1);
+	//draw texture
+	glTranslated(0, 0, 1.01);
+	drawTextureRect(0,0, 2, 2.5);
 	glPopMatrix();
 }
+
 
 void Gundan::drawHead()
 {	
