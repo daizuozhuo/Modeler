@@ -6,6 +6,7 @@
 
 #include "modelerglobals.h"
 typedef Vec3<double> v3;
+#define PI 3.14159265
 
 // To make a Gundan, we inherit off of ModelerView
 class Gundan : public ModelerView 
@@ -73,6 +74,35 @@ void drawPrism(double x1, double y1, double z1,
 
 void drawPrism(v3 a, v3 b, v3 c, double h) {
 	drawPrism(a[0], a[1], a[2], b[0], b[1], b[2], c[0], c[1], c[2], h);
+}
+
+void drawTorus(double r, double p)
+{
+	double a, b;
+	double x, y, z;
+	double step = 0.05;
+	for(double d=0; d<2*PI; d+=step) {
+		a = r * cos(d);
+		b = r * sin(d);
+		glBegin(GL_LINE_LOOP);
+		for(double phi=0; phi<PI; phi+=step) {
+			x = p * cos(d) * sin(phi);
+			y = p * sin(d) * sin(phi);
+			z = p * cos(phi);
+			glNormal3d(x, y, z);
+			glVertex3d(a+x, b+y, z);
+		}
+		glEnd();
+		glBegin(GL_LINE_LOOP);
+		for(double phi=0; phi<PI; phi+=step) {
+			x = p * cos(d) * sin(phi);
+			y = p * sin(d) * sin(phi);
+			z = p * cos(phi);
+			glNormal3d(x, y, z);
+			glVertex3d(a-x/4, b-y/4, z);
+		}
+		glEnd();
+	}
 }
 
 // We need to make a creator function, mostly because of
@@ -274,17 +304,22 @@ void Gundan::drawBody()
 {
 	glPushMatrix();
 	//draw GN driver
-	glTranslated(0, 0, -0.5-0.8);
+	glTranslated(0, 0.5, -0.5-0.8);
 	setDiffuseColor(1.0f, 1.0f, 1.0f);
 	drawCylinder(0.8, 0.01, 0.4);
 	//draw Body
-	glTranslated(-1, -1, 0.8);
-	setDiffuseColor(COLOR_BLUE);
-	//glScaled(2, 2.5, 1); 
+	glTranslated(-1, -1.5, 0.8);
+	setDiffuseColor(0.5f, 0.5f, 0.5f);
 	drawBox(2, 2.5, 1);
 	//draw texture
 	glTranslated(0, 0, 1.01);
-	drawTextureRect(0,0, 2, 2.5);
+	glTranslated(1, 1.5, 0);
+	glLineWidth(4.0);
+	setDiffuseColor(COLOR_GREEN);
+	drawSphere(0.35);
+	setDiffuseColor(1.0f, 1.0f, 1.0f);
+	drawTorus(0.4, 0.2);
+	//drawTextureRect(0,0, 2, 2.5);
 	glPopMatrix();
 }
 
@@ -408,6 +443,9 @@ void Gundan::drawSword()
 	glPopMatrix();
 }
 
+
+
+	
 // We are going to override (is that the right word?) the draw()
 // method of ModelerView to draw out Gundan
 void Gundan::draw()

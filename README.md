@@ -16,3 +16,4 @@ Modeler
 - [x] complex shape with set of triangle(shoes)
 - [x] widget(sword)
 - [x] texture(blue white checkbox)
+- [x] new primitive(torus)
