@@ -342,17 +342,19 @@ void Gundan::drawHead()
 
 void Gundan::drawLefthand()
 {
-	double armLength = 4.0;
+	double armLength = 3.5;
 	glPushMatrix(); 
+	glTranslated(-1.5, 1.2, -0.5); 
+	glRotated(VAL(LHAND), 0, 0, -1);
+	glTranslated(0, -armLength, 0); 
 	setDiffuseColor(COLOR_BLUE);
-	v3 a(-1.1, 1.5, -0.5);
-	v3 b(-1.1, 1.0, -0.5);
-	v3 c(-2.1, 1.5, -0.5);
-	v3 d(-1.5, 1.2, -0.5);
-	v3 e(-2.1, 1.2, -0.5);
+	v3 a(0.4, 0.3+armLength, 0);
+	v3 b(0.4, -0.2+armLength, 0);
+	v3 c(-0.6, 0.3+armLength, 0);
+	v3 d(0, armLength, 0);
+	v3 e(-0.6, armLength, 0);
 	drawPrism(a, c, b, 1.0);
 	drawPrism(d, c, e, 1.0);
-	glTranslated(d[0], d[1]-armLength, -0.5); 
 	setDiffuseColor(1.0f, 1.0f, 1.0f);
 	drawBox(e[0]-d[0], armLength, 1.0);
 	if(VAL(SWORD)) {
@@ -365,17 +367,19 @@ void Gundan::drawLefthand()
 
 void Gundan::drawRighthand()
 {
-	double armLength = 4.0;
+	double armLength = 3.5;
 	glPushMatrix();
+	glTranslated(1.5, 1.2, -0.5); 
+	glRotated(VAL(RHAND), 0, 0, 1);
+	glTranslated(0, -armLength, 0); 
 	setDiffuseColor(COLOR_BLUE);
-	v3 a(1.1, 1.5, -0.5);
-	v3 b(1.1, 1.0, -0.5);
-	v3 c(2.1, 1.5, -0.5);
-	v3 d(1.5, 1.2, -0.5);
-	v3 e(2.1, 1.2, -0.5);
+	v3 a(-0.4, 0.3+armLength, 0);
+	v3 b(-0.4, -0.2+armLength, 0);
+	v3 c(0.6, 0.3+armLength, 0);
+	v3 d(0, armLength, 0);
+	v3 e(0.6, armLength, 0);
 	drawPrism(a, b, c, 1.0);
 	drawPrism(d, e, c, 1.0);
-	glTranslated(d[0], d[1]-armLength, -0.5); 
 	setDiffuseColor(1.0f, 1.0f, 1.0f);
 	drawBox(e[0]-d[0], armLength, 1.0);
 	glPopMatrix();
@@ -444,9 +448,6 @@ void Gundan::drawSword()
 	glPopMatrix();
 }
 
-
-
-	
 // We are going to override (is that the right word?) the draw()
 // method of ModelerView to draw out Gundan
 void Gundan::draw()
@@ -471,6 +472,8 @@ int main()
 {
     ModelerControl controls[NUMCONTROLS];
     controls[LEVEL] = ModelerControl("level", 1, 4, 1, 4);
+    controls[LHAND] = ModelerControl("left hand", 0, 70, 1, 10);
+    controls[RHAND] = ModelerControl("right hand", 0, 70, 1, 10);
     controls[LKNEEL] = ModelerControl("left kneel", 0, 70, 1, 0);
     controls[RKNEEL] = ModelerControl("right kneel", 0, 70, 1, 0);
     controls[LLEGX] = ModelerControl("left leg x", 0, 60, 1, 5);
