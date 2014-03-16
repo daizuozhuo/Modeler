@@ -17,3 +17,4 @@ Modeler
 - [x] widget(sword)
 - [x] texture(blue white checkbox)
 - [x] new primitive(torus)
+- [x] frame all

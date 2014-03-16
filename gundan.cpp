@@ -26,11 +26,6 @@ private:
 	void drawSword();
 };
 
-
-v3 crossProduct(v3 a, v3 b) {
-	return v3(a[1]*b[2] - a[2]*b[1], a[2]*b[0] - a[0]*b[2], a[0]*b[1] - a[1]*b[0]);
-}
-
 void drawTriangle(v3 a, v3 b, v3 c) {
 	drawTriangle(a[0], a[1], a[2], b[0], b[1], b[2], c[0], c[1], c[2]);
 }
@@ -344,9 +339,10 @@ void Gundan::drawLefthand()
 {
 	double armLength = 3.5;
 	glPushMatrix(); 
-	glTranslated(-1.5, 1.2, -0.5); 
-	glRotated(VAL(LHAND), 0, 0, -1);
-	glTranslated(0, -armLength, 0); 
+	glTranslated(-1.5, 1.2, 0); 
+	glRotated(VAL(LHANDX), 0, 0, -1);
+	glRotated(VAL(LHANDZ), -1, 0, 0);
+	glTranslated(0, -armLength, -0.5); 
 	setDiffuseColor(COLOR_BLUE);
 	v3 a(0.4, 0.3+armLength, 0);
 	v3 b(0.4, -0.2+armLength, 0);
@@ -369,9 +365,10 @@ void Gundan::drawRighthand()
 {
 	double armLength = 3.5;
 	glPushMatrix();
-	glTranslated(1.5, 1.2, -0.5); 
-	glRotated(VAL(RHAND), 0, 0, 1);
-	glTranslated(0, -armLength, 0); 
+	glTranslated(1.5, 1.2, 0); 
+	glRotated(VAL(RHANDX), 0, 0, 1);
+	glRotated(VAL(RHANDZ), 1, 0, 0);
+	glTranslated(0, -armLength, -0.5); 
 	setDiffuseColor(COLOR_BLUE);
 	v3 a(-0.4, 0.3+armLength, 0);
 	v3 b(-0.4, -0.2+armLength, 0);
@@ -472,8 +469,10 @@ int main()
 {
     ModelerControl controls[NUMCONTROLS];
     controls[LEVEL] = ModelerControl("level", 1, 4, 1, 4);
-    controls[LHAND] = ModelerControl("left hand", 0, 70, 1, 10);
-    controls[RHAND] = ModelerControl("right hand", 0, 70, 1, 10);
+    controls[LHANDX] = ModelerControl("left hand x", 0, 70, 1, 10);
+    controls[RHANDX] = ModelerControl("right hand x", 0, 70, 1, 10);
+    controls[LHANDZ] = ModelerControl("left hand z", -80, 80, 1, 0);
+    controls[RHANDZ] = ModelerControl("right hand z", -80, 80, 1, 0);
     controls[LKNEEL] = ModelerControl("left kneel", 0, 70, 1, 0);
     controls[RKNEEL] = ModelerControl("right kneel", 0, 70, 1, 0);
     controls[LLEGX] = ModelerControl("left leg x", 0, 60, 1, 5);

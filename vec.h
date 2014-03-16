@@ -28,6 +28,11 @@ template <class T> class Vec4;
 template <class T> class Mat3;
 template <class T> class Mat4;
 
+template<class T>
+Vec3<T> crossProduct(Vec3<T> a, Vec3<T> b) {
+	return Vec3<T>(a[1]*b[2] - a[2]*b[1], a[2]*b[0] - a[0]*b[2], a[0]*b[1] - a[1]*b[0]);
+}
+
 //==========[ Exception Classes ]==========================
 
 class VectorSizeMismatch {};
