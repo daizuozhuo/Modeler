@@ -272,11 +272,11 @@ void drawTextureRect(double x1, double y1, double x2, double y2)
 		for(int j=0; j<w; j++) {
 			if(blue) {
 				pixels[i][j][0]=0.0;
-				pixels[i][j][1]=0.0;
-				pixels[i][j][2]=1.0;
-			} else {
-				pixels[i][j][0]=1.0;
 				pixels[i][j][1]=1.0;
+				pixels[i][j][2]=0.0;
+			} else {
+				pixels[i][j][0]=0.0;
+				pixels[i][j][1]=0.0;
 				pixels[i][j][2]=1.0;
 			}
 			blue = !blue;
@@ -313,13 +313,14 @@ void Gundan::drawBody()
 	drawBox(2, 2.5, 1);
 	//draw texture
 	glTranslated(0, 0, 1.01);
+	drawTextureRect(0,0, 2, 2.5);
+	//draw torus
 	glTranslated(1, 1.5, 0);
-	glLineWidth(4.0);
 	setDiffuseColor(COLOR_GREEN);
 	drawSphere(0.35);
 	setDiffuseColor(1.0f, 1.0f, 1.0f);
+	glLineWidth(4.0);
 	drawTorus(0.4, 0.2);
-	//drawTextureRect(0,0, 2, 2.5);
 	glPopMatrix();
 }
 
