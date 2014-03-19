@@ -114,7 +114,7 @@ void Gundan::drawRightThign()
 	double kneel = VAL(RKNEEL);
 	//draw upper joint
 	glTranslated(0.1, -1.6, 0);
-	glRotated(kneel, -1.0, 0.0, 0.0); 
+	glRotated(kneel+VAL(RLEGZ), -1.0, 0.0, 0.0); 
 	glRotated(VAL(RLEGX),0.0, 0.0, 1.0); 
 
 	//draw upper joint
@@ -143,7 +143,7 @@ void Gundan::drawRightShank()
 {
 	double kneel = VAL(RKNEEL);
 	//draw middle joint
-	glRotated(2 * kneel, 1.0, 0.0, 0.0); 
+	glRotated(2 * kneel+VAL(RSHANKZ), 1.0, 0.0, 0.0); 
 	glPushMatrix();
 	{
 		glRotated(90, 0.0, 1.0, 0.0);
@@ -178,7 +178,7 @@ void Gundan::drawLeftThign()
 	double kneel = VAL(LKNEEL);
 	int level = VAL(LEVEL);
 	glTranslated(-0.1, -1.6, 0);
-	glRotated(kneel, -1.0, 0.0, 0.0); 
+	glRotated(kneel+VAL(LLEGZ), -1.0, 0.0, 0.0); 
 	glRotated(VAL(LLEGX),0.0, 0.0, -1.0); 
 
 	//draw upper join
@@ -206,7 +206,7 @@ void Gundan::drawLeftThign()
 void Gundan::drawLeftShank()
 {
 	double kneel = VAL(LKNEEL);
-	glRotated(2 * kneel, 1.0, 0.0, 0.0); 
+	glRotated(2 * kneel +VAL(LSHANKZ), 1.0, 0.0, 0.0); 
 
 	//draw middle joint
 	glPushMatrix();
@@ -486,13 +486,12 @@ int main()
     controls[RHANDZ] = ModelerControl("right hand z", -80, 80, 1, 0);
     controls[LKNEEL] = ModelerControl("left kneel", 0, 70, 1, 0);
     controls[RKNEEL] = ModelerControl("right kneel", 0, 70, 1, 0);
-
     controls[LLEGX] = ModelerControl("left leg x", 0, 60, 1, 5);
     controls[RLEGX] = ModelerControl("right leg x", 0, 60, 1, 5);
     controls[LLEGZ] = ModelerControl("left leg z", -80, 80, 1, 0);
     controls[RLEGZ] = ModelerControl("right leg z", -80, 80, 1, 0);
-    controls[LSHANKZ] = ModelerControl("left shank z", 0, -180, 1, 0);
-    controls[RSHANKZ] = ModelerControl("right shank x", 0, -180, 1, 0);
+    controls[LSHANKZ] = ModelerControl("left shank z", 0, 120, 1, 0);
+    controls[RSHANKZ] = ModelerControl("right shank z", 0, 120, 1, 0);
 	controls[SWORD] = ModelerControl("sword", 0, 1, 1, 1);
     ModelerApplication::Instance()->Init(&createGundan, controls, NUMCONTROLS);
     return ModelerApplication::Instance()->Run();
