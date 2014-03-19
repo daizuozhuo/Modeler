@@ -188,7 +188,7 @@ void Camera::applyViewingTransform() {
 
 void Camera::frameAll() {
 	mDolly = -30;
-	applyViewingTransform();
+	mDirtyTransform = true;
 }
 
 void Camera::lookAt(Vec3f position, Vec3f lookAt, Vec3f upVector) {

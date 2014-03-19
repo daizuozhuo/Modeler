@@ -21,8 +21,10 @@ private:
 	void drawRighthand();
 	void drawLefthand();
 	void drawHip();
-	void drawRightleg();
-	void drawLeftleg();
+	void drawLeftThign();
+	void drawRightThign();
+	void drawLeftShank();
+	void drawRightShank();
 	void drawSword();
 };
 
@@ -107,41 +109,40 @@ ModelerView* createGundan(int x, int y, int w, int h, char *label)
     return new Gundan(x,y,w,h,label); 
 }
 
-void Gundan::drawRightleg()
+void Gundan::drawRightThign()
 {
 	double kneel = VAL(RKNEEL);
-	//draw the right leg
-	glPushMatrix();
 	//draw upper joint
-	glTranslated(0.1, -1.4, 0);
+	glTranslated(0.1, -1.6, 0);
 	glRotated(kneel, -1.0, 0.0, 0.0); 
 	glRotated(VAL(RLEGX),0.0, 0.0, 1.0); 
+
+	//draw upper joint
 	glPushMatrix();
-	{
-		glRotated(90, 0.0, 1.0, 0.0);
-		setDiffuseColor(0.6f, 0.6f, 0.6f);
-		drawCylinder(1.2, 0.3, 0.3);
-	}
+	glRotated(90, 0.0, 1.0, 0.0);
+	setDiffuseColor(0.6f, 0.6f, 0.6f);
+	drawCylinder(1.2, 0.3, 0.3);
 	glPopMatrix();
 
 	//draw upper leg
 	double ulen=-1.5;
-	{
-		v3 a1(0.9, ulen, -0.3);
-		v3 b1(0.3, ulen, -0.3);
-		v3 c1(0.3, ulen, 0.3);
-		v3 d1(0.9, ulen, 0.3);
-		v3 a2(1.1, 0.0, -0.3);
-		v3 b2(0.2, 0.0, -0.3);
-		v3 c2(0.2, 0.0, 0.3);
-		v3 d2(1.1, 0.0, 0.3);
-		setDiffuseColor(1.0f, 1.0f, 1.0f);
-		drawQuadruple(a1, b1, c1, d1, a2, b2, c2, d2);
-	}
+	v3 a1(0.9, ulen, -0.3);
+	v3 b1(0.3, ulen, -0.3);
+	v3 c1(0.3, ulen, 0.3);
+	v3 d1(0.9, ulen, 0.3);
+	v3 a2(1.1, 0.0, -0.3);
+	v3 b2(0.2, 0.0, -0.3);
+	v3 c2(0.2, 0.0, 0.3);
+	v3 d2(1.1, 0.0, 0.3);
+	setDiffuseColor(1.0f, 1.0f, 1.0f);
+	drawQuadruple(a1, b1, c1, d1, a2, b2, c2, d2);
+	glTranslated(0.3, ulen-0.1, 0);
+}
 
+void Gundan::drawRightShank()
+{
+	double kneel = VAL(RKNEEL);
 	//draw middle joint
-	ulen += -0.1;
-	glTranslated(0.3, ulen, 0);
 	glRotated(2 * kneel, 1.0, 0.0, 0.0); 
 	glPushMatrix();
 	{
@@ -170,51 +171,48 @@ void Gundan::drawRightleg()
 	v3 d2(0.8, footheight, 0.6);
 	setDiffuseColor(COLOR_RED);
 	drawQuadruple(a1, b1, c1, d1, a2, b2, c2, d2);
-
-	glPopMatrix();
 }
 
-void Gundan::drawLeftleg()
+void Gundan::drawLeftThign()
 {
 	double kneel = VAL(LKNEEL);
-	glPushMatrix();
-	//draw upper joint
-	glTranslated(-0.1, -1.4, 0);
+	int level = VAL(LEVEL);
+	glTranslated(-0.1, -1.6, 0);
 	glRotated(kneel, -1.0, 0.0, 0.0); 
 	glRotated(VAL(LLEGX),0.0, 0.0, -1.0); 
+
+	//draw upper join
 	glPushMatrix();
-	{
-		glRotated(-90, 0.0, 1.0, 0.0);
-		setDiffuseColor(0.6f, 0.6f, 0.6f);
-		drawCylinder(1.2, 0.3, 0.3);
-	}
+	glRotated(-90, 0.0, 1.0, 0.0);
+	setDiffuseColor(0.6f, 0.6f, 0.6f);
+	drawCylinder(1.2, 0.3, 0.3);
 	glPopMatrix();
 
 	//draw upper leg
 	double ulen=-1.5;
-	{
-		v3 a1(-0.9, ulen, -0.3);
-		v3 b1(-0.3, ulen, -0.3);
-		v3 c1(-0.3, ulen, 0.3);
-		v3 d1(-0.9, ulen, 0.3);
-		v3 a2(-1.1, 0.0, -0.3);
-		v3 b2(-0.2, 0.0, -0.3);
-		v3 c2(-0.2, 0.0, 0.3);
-		v3 d2(-1.1, 0.0, 0.3);
-		setDiffuseColor(1.0f, 1.0f, 1.0f);
-		drawQuadruple(d1, c1, b1, a1, d2, c2, b2, a2);
-	}
+	v3 a1(-0.9, ulen, -0.3);
+	v3 b1(-0.3, ulen, -0.3);
+	v3 c1(-0.3, ulen, 0.3);
+	v3 d1(-0.9, ulen, 0.3);
+	v3 a2(-1.1, 0.0, -0.3);
+	v3 b2(-0.2, 0.0, -0.3);
+	v3 c2(-0.2, 0.0, 0.3);
+	v3 d2(-1.1, 0.0, 0.3);
+	setDiffuseColor(1.0f, 1.0f, 1.0f);
+	drawQuadruple(d1, c1, b1, a1, d2, c2, b2, a2);
+	glTranslated(-0.3, ulen-0.1, 0);
+}
+
+void Gundan::drawLeftShank()
+{
+	double kneel = VAL(LKNEEL);
+	glRotated(2 * kneel, 1.0, 0.0, 0.0); 
 
 	//draw middle joint
-	ulen += -0.1;
-	glTranslated(-0.3, ulen, 0);
-	glRotated(2 * kneel, 1.0, 0.0, 0.0); 
 	glPushMatrix();
-	{
-		glRotated(-90, 0.0, 1.0, 0.0);
-		setDiffuseColor(0.6f, 0.6f, 0.6f);
-		drawCylinder(0.6, 0.3, 0.3);
-	}
+	glRotated(-90, 0.0, 1.0, 0.0);
+	setDiffuseColor(0.6f, 0.6f, 0.6f);
+	drawCylinder(0.6, 0.3, 0.3);
 	glPopMatrix();
 
 	//draw lower leg
@@ -225,7 +223,6 @@ void Gundan::drawLeftleg()
 	setDiffuseColor(1.0f, 1.0f, 1.0f);
 	drawBox(0.6, abs(llen), 0.5);
 	glPopMatrix();
-
 	//draw foot
 	double footheight=0.5;
 	glTranslated(0.2, -footheight, 0);
@@ -239,8 +236,6 @@ void Gundan::drawLeftleg()
 	v3 d2(-0.8, footheight, 0.6);
 	setDiffuseColor(COLOR_RED);
 	drawQuadruple(d1, c1, b1, a1, d2, c2, b2, a2);
-
-	glPopMatrix();
 }
 
 void drawTextureRect(double x1, double y1, double x2, double y2)
@@ -297,7 +292,6 @@ void drawTextureRect(double x1, double y1, double x2, double y2)
 
 void Gundan::drawBody()
 {
-	glPushMatrix();
 	//draw GN driver
 	glTranslated(0, 0.5, -0.5-0.8);
 	setDiffuseColor(1.0f, 1.0f, 1.0f);
@@ -316,14 +310,11 @@ void Gundan::drawBody()
 	setDiffuseColor(1.0f, 1.0f, 1.0f);
 	glLineWidth(4.0);
 	drawTorus(0.4, 0.2);
-	glPopMatrix();
 }
-
 
 void Gundan::drawHead()
 {	
-	glPushMatrix();
-	glTranslated(-0.5, 2, -0.5);
+	glTranslated(-0.5, 1.5, -1.01);
 	setDiffuseColor(1.0f, 1.0f, 1.0f);
 	drawBox(1, 1, 1);
 	glTranslated(0.3, 0.6, 1);
@@ -332,14 +323,12 @@ void Gundan::drawHead()
 	setDiffuseColor(1.0f, 1.0f, 0);
 	drawPrism(0, 0, 0, 0, 0.4, 0, -1.6, 1.6, 0, 0.1);
 	drawPrism(0.4, 0, 0, 2.0, 1.6, 0, 0.4, 0.4, 0, 0.1);
-	glPopMatrix();
 }
 
 void Gundan::drawLefthand()
 {
 	double armLength = 3.5;
-	glPushMatrix(); 
-	glTranslated(-1.5, 1.2, 0); 
+	glTranslated(-1.5, 1.2, -0.5); 
 	glRotated(VAL(LHANDX), 0, 0, -1);
 	glRotated(VAL(LHANDZ), -1, 0, 0);
 	glTranslated(0, -armLength, -0.5); 
@@ -357,15 +346,12 @@ void Gundan::drawLefthand()
 		glTranslated((e[0]-d[0])/2, 0.0, 1.0);
 		drawSword();
 	}
-	glPopMatrix();
-
 }
 
 void Gundan::drawRighthand()
 {
 	double armLength = 3.5;
-	glPushMatrix();
-	glTranslated(1.5, 1.2, 0); 
+	glTranslated(1.5, 1.2, -0.5); 
 	glRotated(VAL(RHANDX), 0, 0, 1);
 	glRotated(VAL(RHANDZ), 1, 0, 0);
 	glTranslated(0, -armLength, -0.5); 
@@ -379,18 +365,16 @@ void Gundan::drawRighthand()
 	drawPrism(d, e, c, 1.0);
 	setDiffuseColor(1.0f, 1.0f, 1.0f);
 	drawBox(e[0]-d[0], armLength, 1.0);
-	glPopMatrix();
 }
 
 void Gundan::drawHip()
 {
-	glPushMatrix();
+	glTranslated(0, -0.5, -0.5);
 	setDiffuseColor(1.0f, 1.0f, 1.0f);
 	v3 a(1.2, -1.1, -0.5);
 	v3 b(-1.2, -1.1, -0.5);
 	v3 c(0, -1.6, -0.5);
 	drawPrism(a, b, c, 1.0);
-	glPopMatrix();
 }
 
 void Gundan::drawSword()
@@ -445,24 +429,51 @@ void Gundan::drawSword()
 	glPopMatrix();
 }
 
-// We are going to override (is that the right word?) the draw()
-// method of ModelerView to draw out Gundan
 void Gundan::draw()
 {
     ModelerView::draw();
 	setAmbientColor(.1f,.1f,.1f);
 	int level = VAL(LEVEL);
-	if(level >= 1) drawHead();
-	if(level >= 2) drawBody();
-    if(level >= 3){
-		drawRighthand();
+	//level 1
+	glPushMatrix();
+	drawBody();
+	if(level>=2) {
+		glPushMatrix();
+		drawHead();
+		glPopMatrix();
+		
+		glPushMatrix();
 		drawLefthand();
+		glPopMatrix();
+
+		glPushMatrix();
+		drawRighthand();
+		glPopMatrix();
+
+		glPushMatrix();
 		drawHip();
+		if(level>=3) {
+			glPushMatrix();
+			drawLeftThign();
+			if(level>=4) {
+				glPushMatrix();
+				drawLeftShank();
+				glPopMatrix();
+			}
+			glPopMatrix();
+
+			glPushMatrix();
+			drawRightThign();
+			if(level>=4) {
+				glPushMatrix();
+				drawRightShank();
+				glPopMatrix();
+			}
+			glPopMatrix();
+		}
+		glPopMatrix();
 	}
-	if(level >=4) {	
-		drawRightleg();
-		drawLeftleg();
-	}
+	glPopMatrix();
 }
 
 int main()
@@ -475,8 +486,13 @@ int main()
     controls[RHANDZ] = ModelerControl("right hand z", -80, 80, 1, 0);
     controls[LKNEEL] = ModelerControl("left kneel", 0, 70, 1, 0);
     controls[RKNEEL] = ModelerControl("right kneel", 0, 70, 1, 0);
+
     controls[LLEGX] = ModelerControl("left leg x", 0, 60, 1, 5);
     controls[RLEGX] = ModelerControl("right leg x", 0, 60, 1, 5);
+    controls[LLEGZ] = ModelerControl("left leg z", -80, 80, 1, 0);
+    controls[RLEGZ] = ModelerControl("right leg z", -80, 80, 1, 0);
+    controls[LSHANKZ] = ModelerControl("left shank z", 0, -180, 1, 0);
+    controls[RSHANKZ] = ModelerControl("right shank x", 0, -180, 1, 0);
 	controls[SWORD] = ModelerControl("sword", 0, 1, 1, 1);
     ModelerApplication::Instance()->Init(&createGundan, controls, NUMCONTROLS);
     return ModelerApplication::Instance()->Run();
