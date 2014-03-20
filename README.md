@@ -18,3 +18,5 @@ Modeler
 - [x] texture(blue white checkbox)
 - [x] new primitive(torus)
 - [x] frame all
+- [x] Inverse Kinematics with constraint
+- [x] animation
