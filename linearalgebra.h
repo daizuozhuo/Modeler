@@ -154,7 +154,7 @@ namespace Linear{
 		}
 
 	protected:
-		double* data;
+		T* data;
 		int dimension;
 	};
 
@@ -213,7 +213,7 @@ namespace Linear{
 			return ret;
 		}
 
-		Mat& operator*=(const Mat& mm) const {
+		Mat& operator*=(const Mat& mm) {
 			int i;
 			Mat r = (*this) * mm;
 			for(i = 0; i < m * n; i++) {
@@ -227,7 +227,7 @@ namespace Linear{
 			Mat ret(n, m);
 			for(i = 0; i < n; i++) {
 				for(j = 0; j < m; j++) {
-					ret[j][i] = ret[i][j];
+					ret[j][i] = data[i * m + j];
 				}
 			}
 			return ret;

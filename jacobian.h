@@ -5,8 +5,9 @@
 #include "euclid.h"
 #include "mathfunc.h"
 
-using namespace Linear;
 using namespace MathFunc;
+using Linear::RealMat;
+using Linear::RealVec;
 
 enum JacobState {
 	NOT_INIT = 0,
@@ -26,19 +27,22 @@ public:
 	//void pushTransV();
 	void pushTransC(double x, double y, double z);
 	void setConstraint(int varid, double min, double max);
+
+	void setTrans(int i, int j, const ExprP& e);
 	
 	void preprocess();
 
 	RealVec stepDelta(const RealVec& cTheta, const RealVec& desPos, double distance, bool &finished);
+	
+	RealVec evalTrans(const RealVec& theta);
 
 private:
-	RealVec evalTrans(const RealVec& theta);
 	
-	Vec<ExprP> initPos;
-	Vec<ExprP> Refined;
+	Linear::Vec<ExprP> initPos;
+	Linear::Vec<ExprP> Refined;
 
-	Mat<ExprP> rawTrans;
-	Mat<ExprP>* Jacob;
+	Linear::Mat<ExprP> rawTrans;
+	Linear::Mat<ExprP>* Jacob;
 	int deg_freedom;
 
 	RealVec* max_constraint;

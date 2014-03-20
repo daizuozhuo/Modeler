@@ -3,18 +3,25 @@
 #include "modelerdraw.h"
 #include "vec.h"
 #include <FL/gl.h>
+#include <FL/Fl.H>
 
 #include "modelerglobals.h"
+#include "jacobian.h"
 typedef Vec3<double> v3;
 #define PI 3.14159265
+
+#define SETVAL(x, v) (ModelerApplication::Instance()->SetControlValue(x, v))
 
 // To make a Gundan, we inherit off of ModelerView
 class Gundan : public ModelerView 
 {
 public:
     Gundan(int x, int y, int w, int h, char *label) 
-        : ModelerView(x,y,w,h,label) { }
+        : ModelerView(x,y,w,h,label), left_feet(NULL), IK_flag(false) {
+			initJacobian();
+	}
     virtual void draw();
+	static Gundan *instance;
 private:
 	void drawHead();
 	void drawBody();
@@ -26,7 +33,18 @@ private:
 	void drawLeftShank();
 	void drawRightShank();
 	void drawSword();
+
+	void initJacobian();
+	void beginIK();
+	static void updateIK(void*);
+	bool updateIKR(int);
+	void drawGoal();
+
+	Jacobian *left_feet;
+	bool IK_flag;
 };
+
+Gundan *Gundan::instance = NULL;
 
 void drawTriangle(v3 a, v3 b, v3 c) {
 	drawTriangle(a[0], a[1], a[2], b[0], b[1], b[2], c[0], c[1], c[2]);
@@ -106,7 +124,8 @@ void drawTorus(double r, double p)
 // nasty API stuff that we'd rather stay away from.
 ModelerView* createGundan(int x, int y, int w, int h, char *label)
 { 
-    return new Gundan(x,y,w,h,label); 
+    Gundan::instance = new Gundan(x,y,w,h,label); 
+	return Gundan::instance;
 }
 
 void Gundan::drawRightThign()
@@ -432,7 +451,13 @@ void Gundan::drawSword()
 void Gundan::draw()
 {
     ModelerView::draw();
+	if(VAL(IK) || VAL(PIK)) {
+		beginIK();
+	}
 	setAmbientColor(.1f,.1f,.1f);
+	if(IK_flag) {
+		drawGoal();
+	}
 	int level = VAL(LEVEL);
 	//level 1
 	glPushMatrix();
@@ -476,6 +501,107 @@ void Gundan::draw()
 	glPopMatrix();
 }
 
+void Gundan::initJacobian() {
+	//Reconstruct transformation
+	left_feet = new Jacobian(3);
+
+	//LLEGZ: 0, LLEGX: 1, LSHANKZ: 2
+
+	/*
+	//Thigh
+	left_feet->pushTransC(-0.1, -1.6, 0);
+	left_feet->pushRotV(0, -1.0, 0.0, 0.0);
+	left_feet->pushRotV(1, 0.0, 0.0, -1.0);
+	left_feet->pushTransC(-0.3, -1.6, 0);
+
+	//Shank
+	
+	left_feet->pushRotV(2, 1.0, 0.0, 0.0); 
+	left_feet->pushTransC(0.2, -2.5, -0.25);*/
+
+	left_feet->setTrans(0, 0, CosFunc(1));
+	left_feet->setTrans(0, 1, CosFunc(2) * SinFunc(1));
+	left_feet->setTrans(0, 2, - SinFunc(2) * SinFunc(1));
+	left_feet->setTrans(0, 3, -0.1 - 0.1 * CosFunc(1) + SinFunc(1) * (-1.6 - 2.5 * CosFunc(2) + 0.25 * SinFunc(2)));
+	
+	left_feet->setTrans(1, 0, - CosFunc(0) * SinFunc(1));
+	left_feet->setTrans(1, 1, CosFunc(0) * CosFunc(1) * CosFunc(2) + SinFunc(0) * SinFunc(2));
+	left_feet->setTrans(1, 2, CosFunc(2) * SinFunc(0) - CosFunc(0) * CosFunc(1) * SinFunc(2));
+	left_feet->setTrans(1, 3, -1.6 + CosFunc(0) * (0.1 * SinFunc(1) + CosFunc(1) * (-1.6-2.5 * CosFunc(2) + 0.25 * SinFunc(2))) + SinFunc(0) * (-0.25 * CosFunc(2) - 2.5 * SinFunc(2)));
+	
+	left_feet->setTrans(2, 0, SinFunc(0) * SinFunc(1));
+	left_feet->setTrans(2, 1, - CosFunc(1) * CosFunc(2) * SinFunc(0) + CosFunc(0) * SinFunc(2));
+	left_feet->setTrans(2, 2, CosFunc(0) * CosFunc(2) + CosFunc(1) * SinFunc(0) * SinFunc(2));
+	left_feet->setTrans(2, 3, SinFunc(0) * (-0.1 * SinFunc(1) + CosFunc(1) * (1.6 + 2.5 * CosFunc(2) - 0.25 * SinFunc(2))) + CosFunc(0) * (-0.25 * CosFunc(2) - 2.5 * SinFunc(2)));
+	
+	left_feet->setTrans(3, 0, ConstFunc(0));
+	left_feet->setTrans(3, 1, ConstFunc(0));
+	left_feet->setTrans(3, 2, ConstFunc(0));
+	left_feet->setTrans(3, 3, ConstFunc(1));
+
+
+	left_feet->setInitVec(-0.475, -0.75, 0.0);
+}
+
+void Gundan::beginIK() {
+	SETVAL(LKNEEL, 0);
+	SETVAL(IK, 0);
+	if(IK_flag == true) {
+		return;
+	}
+
+	//Set constraints
+	left_feet->setConstraint(0, VAL(LLEGZMIN) / 180.0 * PI, VAL(LLEGZMAX) / 180.0 * PI);
+	left_feet->setConstraint(1, VAL(LLEGXMIN) / 180.0 * PI, VAL(LLEGXMAX) / 180.0 * PI);
+	left_feet->setConstraint(2, VAL(LSHANKZMIN) / 180.0 * PI, VAL(LSHANKZMAX) / 180.0 * PI);
+	IK_flag = true;
+
+	//preprocess
+	left_feet->preprocess();
+	Fl::add_timeout(0.025, Gundan::updateIK, (void*)1);
+	ModelerApplication::Instance()->m_animating = true;
+}
+
+void Gundan::updateIK(void* cnt) {
+	int c = (int)cnt;
+	if(VAL(PIK)) {
+		c = 1;
+	}
+	if((VAL(PIK) || c <= 200) && Gundan::instance->updateIKR(c)) {
+		Fl::add_timeout(0.025, Gundan::updateIK, (void*)(c+1));
+	}
+	else {
+		ModelerApplication::Instance()->m_animating = false;
+		Gundan::instance->IK_flag = false;
+	}
+}
+
+bool Gundan::updateIKR(int generation) {
+	RealVec t(3), r(4), c(4);
+	double delta = 0.01 * sqrt(generation);
+	bool f=false;
+	if(delta > 0.1) {
+		delta = 0.1;
+	}
+	t[0] = VAL(LLEGZ) / 180.0 * PI; t[1] = VAL(LLEGX) / 180.0 * PI; t[2] = VAL(LSHANKZ) / 180.0 * PI;
+	r[0] = -VAL(IKX) / 10.0 - 0.675; r[1] = VAL(IKY) / 10.3 - 6.38; r[2] = VAL(IKZ) / 11.0 - 0.25; r[3] = 1;
+	t = left_feet->stepDelta(t, r, delta, f);
+	c = left_feet->evalTrans(t) - r;
+	if(c.modulus() < 1e-4) {
+		f = true;
+	}
+	SETVAL(LLEGZ, t[0] * 180.0 / PI); SETVAL(LLEGX, t[1] * 180.0 / PI); SETVAL(LSHANKZ, t[2] * 180.0 / PI);
+	return !f;
+}
+
+void Gundan::drawGoal() {
+	glPushMatrix();
+	glTranslated(-VAL(IKX) / 10.0 - 0.45, VAL(IKY) / 10.3 - 5.7, VAL(IKZ) / 11.0 + 0.1);
+	setDiffuseColor(0.7f, 1.0f, 1.0f);
+	drawSphere(0.5);
+	glPopMatrix();
+}
+
 int main()
 {
     ModelerControl controls[NUMCONTROLS];
@@ -493,6 +619,17 @@ int main()
     controls[LSHANKZ] = ModelerControl("left shank z", 0, 120, 1, 0);
     controls[RSHANKZ] = ModelerControl("right shank z", 0, 120, 1, 0);
 	controls[SWORD] = ModelerControl("sword", 0, 1, 1, 1);
+	controls[IKX] = ModelerControl("inverse kinematics x", 0, 40, 1, 4);
+	controls[IKY] = ModelerControl("inverse kinematics y", 0, 40, 1, 0);
+	controls[IKZ] = ModelerControl("inverse kinematics z", -50, 50, 1, 0);
+	controls[LLEGZMIN] = ModelerControl("left leg z min", -80, 80, 1, -80);
+	controls[LLEGZMAX] = ModelerControl("left leg z max", -80, 80, 1, 80);
+	controls[LLEGXMIN] = ModelerControl("left leg x min", 0, 60, 1, 0);
+	controls[LLEGXMAX] = ModelerControl("left leg x max", 0, 60, 1, 60);
+	controls[LSHANKZMIN] = ModelerControl("left shank z min", 0, 120, 1, 0);
+	controls[LSHANKZMAX] = ModelerControl("left shank z max", 0, 120, 1, 120);
+	controls[IK] = ModelerControl("start inverse kinematics", 0, 1, 1, 0);
+	controls[PIK] = ModelerControl("persist inverse kinematics", 0, 1, 1, 0);
     ModelerApplication::Instance()->Init(&createGundan, controls, NUMCONTROLS);
     return ModelerApplication::Instance()->Run();
 }

@@ -42,6 +42,51 @@ ExprP& ExprP::operator=(double scalar) {
 	return (*this);
 }
 
+ExprP& ExprP::operator+=(const ExprP& e) {
+	expr = new Add(expr, e.expr->nSelf());
+	return (*this);
+}
+
+ExprP& ExprP::operator+=(const Expr& e) {
+	expr = new Add(expr, e.nSelf());
+	return (*this);
+}
+
+ExprP& ExprP::operator+=(double scalar) {
+	expr = new Add(expr, new ConstFunc(scalar));
+	return (*this);
+}
+
+ExprP& ExprP::operator*=(const ExprP& e) {
+	expr = new Mult(expr, e.expr->nSelf());
+	return (*this);
+}
+
+ExprP& ExprP::operator*=(const Expr& e) {
+	expr = new Mult(expr, e.nSelf());
+	return (*this);
+}
+
+ExprP& ExprP::operator*=(double scalar) {
+	expr = new Mult(expr, new ConstFunc(scalar));
+	return (*this);
+}
+
+ExprP& ExprP::operator-=(const ExprP& e) {
+	expr = new Minus(expr, e.expr->nSelf());
+	return (*this);
+}
+
+ExprP& ExprP::operator-=(const Expr& e) {
+	expr = new Minus(expr, e.nSelf());
+	return (*this);
+}
+
+ExprP& ExprP::operator-=(double scalar) {
+	expr = new Minus(expr, new ConstFunc(scalar));
+	return (*this);
+}
+
 double ExprP::eval(const RealVec& v) const {
 	return expr->eval(v);
 }

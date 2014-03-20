@@ -50,6 +50,7 @@ public:
     // Get and set slider values.
     double GetControlValue(int controlNumber);
     void   SetControlValue(int controlNumber, double value);
+	bool m_animating;
 
 private:
 	// Private for singleton
@@ -76,7 +77,6 @@ private:
 	static void RedrawLoop(void*);
 
 	// Just a flag for updates
-	bool m_animating;
 };
 
 #endif

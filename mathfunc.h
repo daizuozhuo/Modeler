@@ -30,6 +30,18 @@ namespace MathFunc {
 		ExprP& operator=(const ExprP& e);
 		ExprP& operator=(const Expr& e);
 		ExprP& operator=(double scalar);
+		
+		ExprP& operator+=(const ExprP& e);
+		ExprP& operator+=(const Expr& e);
+		ExprP& operator+=(double scalar);
+		
+		ExprP& operator*=(const ExprP& e);
+		ExprP& operator*=(const Expr& e);
+		ExprP& operator*=(double scalar);
+		
+		ExprP& operator-=(const ExprP& e);
+		ExprP& operator-=(const Expr& e);
+		ExprP& operator-=(double scalar);
 
 		double eval(const RealVec& v) const;
 		double operator()(const RealVec& v) const;
