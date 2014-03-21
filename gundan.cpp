@@ -618,7 +618,7 @@ int main()
     controls[RLEGZ] = ModelerControl("right leg z", -80, 80, 1, 0);
     controls[LSHANKZ] = ModelerControl("left shank z", 0, 120, 1, 0);
     controls[RSHANKZ] = ModelerControl("right shank z", 0, 120, 1, 0);
-	controls[SWORD] = ModelerControl("sword", 0, 1, 1, 1);
+	controls[SWORD] = ModelerControl("sword", 0, 1, 1, 0);
 	controls[IKX] = ModelerControl("inverse kinematics x", 0, 40, 1, 4);
 	controls[IKY] = ModelerControl("inverse kinematics y", 0, 40, 1, 0);
 	controls[IKZ] = ModelerControl("inverse kinematics z", -50, 50, 1, 0);

@@ -80,6 +80,8 @@ static GLfloat lightDiffuse0[]  = { 1,1,1,1 };
 //static GLfloat lightPosition1[] = { -2, 1, 5, 0 };
 static GLfloat lightPosition1[] = { 0, 20, 20, 5 };
 static GLfloat lightDiffuse1[]  = { 1, 1, 1, 1 };
+static GLfloat lightPosition2[] = { -20, 5, -2, 5 };
+static GLfloat lightDiffuse2[]  = { 1, 1, 1, 1.0 };
 
 void ModelerView::draw()
 {
@@ -90,6 +92,7 @@ void ModelerView::draw()
         glEnable( GL_LIGHTING );
 		glEnable( GL_LIGHT0 );
         glEnable( GL_LIGHT1 );
+        glEnable( GL_LIGHT2 );
 		glEnable( GL_NORMALIZE );
     }
 
@@ -107,4 +110,6 @@ void ModelerView::draw()
     glLightfv( GL_LIGHT0, GL_DIFFUSE, lightDiffuse0 );
     glLightfv( GL_LIGHT1, GL_POSITION, lightPosition1 );
     glLightfv( GL_LIGHT1, GL_DIFFUSE, lightDiffuse1 );
+    glLightfv( GL_LIGHT2, GL_POSITION, lightPosition2 );
+    glLightfv( GL_LIGHT2, GL_DIFFUSE, lightDiffuse2 );
 }
